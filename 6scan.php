@@ -58,6 +58,8 @@ if ( is_admin() ) {
 	
 	/*	6Scan menu in Wordpress toolbar */
 	add_action( 'admin_menu' , 'sixscan_menu_install' );	
+	/*	Vulnerabilities found warning */
+	add_action( 'admin_notices' , 'sixscan_menu_show_vulnerabilities_warning' );
 }
 
 /*	Setting/clearing admin auth cookie */	
