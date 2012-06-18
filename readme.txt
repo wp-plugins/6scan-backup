@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.1.5
+Version: 2.2.0
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.3.2
