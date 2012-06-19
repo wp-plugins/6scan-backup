@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.0
+Version: 2.2.1
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.3.2
@@ -107,6 +107,10 @@ We are a team of IT and security experts who have decided to bring comprehensive
 
 = 2.1.4 =
 * First branch
+
+= 2.2.1 =
+* Replaced links to old support community with new one
+* Added PHP-based fallback for servers that do not have openssl library installed
 
 == Upgrade Notice ==
 
