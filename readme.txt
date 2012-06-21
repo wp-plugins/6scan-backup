@@ -108,10 +108,6 @@ We are a team of IT and security experts who have decided to bring comprehensive
 = 2.1.4 =
 * First branch
 
-= 2.2.1 =
-* Replaced links to old support community with new one
-* Added PHP-based fallback for servers that do not have openssl library installed
-
 == Upgrade Notice ==
 
 * Automatic file and database backup
