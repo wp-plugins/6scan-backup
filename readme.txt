@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.1
+Version: 2.2.3
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.3.2
@@ -107,6 +107,11 @@ We are a team of IT and security experts who have decided to bring comprehensive
 
 = 2.1.4 =
 * First branch
+
+= 2.2.3 =
+* We have added a full support for WP_Filesystem. If wordpress is running without permissions to access filesystem, user is required to enter the FTP credentials (Based entirely on Wordpress filesystem implementation)
+* Added a 6Scan dashboard widget
+* We also make sure to set a correct permissions mode on our verification file (There are some servers, that create it without runnable permissions by default) 
 
 == Upgrade Notice ==
 
