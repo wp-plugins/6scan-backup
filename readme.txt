@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.4
+Version: 2.2.5
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.4.1
@@ -16,10 +16,10 @@ Stable tag: trunk
 
 Features:
 
-* Fully automatic backup on a predefined schedule.
-* Easy, one-click installation and operation.
+* Fully automatic backup on a predefined schedule.  Our backup server schedules and initiates the backups to minimize the impact on your server.
+* Easy, one-click installation and operation, suitable for all knowledge levels.
 * Backs up everything you need to fully restore your site (file backup and database backup).
-* Online backup storage, accessible from anywhere.
+* Online backup storage, accessible from anywhere and anytime.
 * Backups are securely encrypted during upload and download.
 * Backup history (you can download multiple recent backups).
 * Backups are compressed before upload and download, minimizing their size and download times.
@@ -67,6 +67,12 @@ The backup includes:
 
 These two items are all you need to fully restore your site on a clean server.
 
+= Is 6Scan Backup free? =
+
+According to our research, the average Wordpress site takes up 30-40MB compressed (50-70MB uncompressed) for the files, and under 1MB compressed for the database.  6Scan Backup gives you a weekly backup of your files and database, each up to 100MB, absolutely free.  This covers the vast majority of Wordpress sites.
+
+If your site is larger than 100MB, or you require more frequent backups, you may sign up for one of our premium plans, allowing you to backup up to 2GB, with daily backups and up to 30-day backup retention, allowing you to go back in time in case of a problem.
+
 = Can anybody else access my backups? =
 
 Our backups are securely stored such that only you can access your backups, using a special key created for you when you activate the plugin.
@@ -77,11 +83,17 @@ All backups are stored in our secure cloud-based datacenter, as tar.gz archives,
 
 = How are the backups transferred? =
 
-Backups are transferred to our datacenter using the industry-standard encrypted HTTPS protocol to prevent eavesdropping and data theft.
+Backups are transferred to our datacenter using the industry-standard encrypted HTTPS protocol to prevent eavesdropping and data theft. Backup downloads are also performed using the HTTPS protocol.
 
 = How do I set up storage space for my backups? =
 
 There is nothing to set up!  Storage space is automatically allocated for you when you start your first backup.
+
+= Why do all other backup plugins have a lot of configuration, while you only have one checkbox? =
+
+We're glad you asked!  While other plugins sometimes allow more configuration, we have intentionally made our backup plugin as simple as one checkbox, so that anybody can use it, even if they don't have any experience at all with Wordpress or backup.  We feel that a good backup plugin should do its job automatically, while keeping user interaction to a minimum.  This way, we eliminate the most common errors - wrong configurations - and make sure we can consistently perform backups of your data and keep it available for you for when you really need it.
+
+Our simple interface makes sophisticated configuration impossible, but we believe these options are not necessary for the core feature: keeping you data secure for when you need it, without the hassle.
 
 = What are the system requirements for the backup feature? =
 
@@ -91,9 +103,23 @@ There is nothing to set up!  Storage space is automatically allocated for you wh
 
 The plugin also includes other free security features to help you secure your site against hackers, such as free security scanning, login security, threat analysis, and more!  We highly recommend you take advantage of these features to make sure your site is not vulnerable to attack.
 
+= Won't the backups pile up and take all of my website's space? =
+
+No!  Backup data is only stored temporarily on your server during the backup process itself.  As soon as the process is complete, and the backup has been securely transferred to our cloud datacenter, the temporary backup data will be deleted, and will not take up space on your server.
+
+We have also implemented a failsafe mechanism such that even if a backup is interrupted or otherwise fails to complete, the temporary data will be deleted soon afterwards.
+
+= Does 6Scan Backup support Wordpress Multisite? =
+
+As of now we do not support Multisite, but this feature is in development. Stay tuned!
+
 = I have a feature request! =
 
 We are always open to feature requests. Please contact us with a detailed description of your request at our [support area](http://6scan.com/support), and we will consider including it in our plugin.
+
+= I have received an email from the 6Scan Backup plugin. Why? =
+
+Please note that 6Scan Backup also provides optional advanced security features.  One of the features is keeping track of the latest security breaches in Wordpress and your Wordpress plugins.  If a new problem or vulnerability is found, by default we notify you by email.  However, you can always unsubscribe by unchecking the relevant box on your 6Scan Backup dashboard, under the Settings tab.
 
 = Who is 6Scan? =
 
@@ -106,9 +132,20 @@ We are a team of IT and security experts who have decided to bring comprehensive
 == Changelog ==
 
 = 2.1.4 =
-* First branch
+* Initial 6Scan Backup release.
+
+= 2.1.5 = 
+* Fixed: under certain configurations, server firewalls could mistake a backup request for a security threat and block it.
+* Fixed a bug where some servers would add their html code to scripts' output and confuse the 6Scan Backup plugin.
+
+= 2.2.1 =
+* Fixed a bug, where a database backup could fail in certain server configurations.
+* Added pure PHP implementation of data signature/verification, to replace openssl functions, if a server does not support it
+* Added a workaround for WP_Filesystem initialization. It has sometimes failed, even if Apache process had write access to the required files
+* Added a better error description, in case a backup fails. User can see the error summary, if hovering over a question mark.
 
 == Upgrade Notice ==
 
 * Automatic file and database backup
 * Online storage of backups
+* Increased backup stability
