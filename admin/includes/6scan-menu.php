@@ -14,6 +14,11 @@ function sixscan_menu_install(){
 		/*	Only way to show number near menu is to use the same class, that is used by Plugins menu (when showing how many plugins are out of date ) */
 		$sixscan_menu_title = "6Scan<span class='update-plugins count-" . $vulnerability_count . "'><span class='plugin-count'>" . number_format_i18n( $vulnerability_count ) . "</span></span>";
 	}
+	
+	if  ( ( isset( $_GET[ 'sixscan_activated' ] ) && ( $_GET[ 'sixscan_activated' ] == '1' ) ) ||		
+		( ( isset( $_GET['activate'] ) ) && ( $_GET['activate'] == 'true' ) && ( sixscan_common_is_account_active() == FALSE ) ) ){		
+		$sixscan_menu_title .= sixscan_installation_error_description( 'OK' , '' , 'REGISTER_STARTED' , '0' );
+	}	
 
 	add_menu_page( '6Scan' , $sixscan_menu_title , 'manage_options' , SIXSCAN_COMMON_DASHBOARD_URL , '' , SIXSCAN_PLUGIN_URL . 'data/img/logo_small.png' );
 	add_submenu_page( SIXSCAN_COMMON_DASHBOARD_URL , '6Scan Dashboard' , 'Dashboard' , 'manage_options' , SIXSCAN_COMMON_DASHBOARD_URL , 'sixscan_menu_dashboard' );
@@ -147,13 +152,18 @@ function sixscan_menu_show_vulnerabilities_warning(){
 	if ( get_option( SIXSCAN_VULN_MESSAGE_DISMISSED ) == TRUE ){
 		return;
 	}
+
+	/*	Don't show the message on the dashboard page */
+	if ( isset( $_GET[ 'page' ] ) && ( $_GET[ 'page' ] == SIXSCAN_COMMON_DASHBOARD_URL ) ){
+		return;
+	}	
 	
 	$current_vulns_found = intval( get_option( SIXSCAN_OPTION_VULNERABITILY_COUNT ) );
 	/*	If we have 0 vulnerabilities, don't show the warning */
 	if ( $current_vulns_found == 0 )
 		return;
 	
-	echo '<div id="6scan_dashboard_redirect_caption" class="updated" style="text-align: center;"><p>You have ' . $current_vulns_found  . ' unfixed vulnerabilities. <a href="admin.php?page=' . SIXSCAN_COMMON_DASHBOARD_URL . '&fixnow=1">Click here</a> to fix them now.<a href="#" style="float:right" onClick="sixscan_vuln_warning_dismiss();">Dismiss this message</a></p></div>';
+	echo '<div id="6scan_dashboard_redirect_caption" class="updated" style="text-align: center;"><p>You have ' . $current_vulns_found  . ' unfixed vulnerabilities. <a href="admin.php?page=' . SIXSCAN_COMMON_DASHBOARD_URL . '&fixnow=1">Click here</a> to fix them now.</p></div>';
 }
 
 /*	Hiding the vulnerabilties warning */

@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.6
+Version: 2.2.7
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.4.1
@@ -143,6 +143,27 @@ We are a team of IT and security experts who have decided to bring comprehensive
 * Added pure PHP implementation of data signature/verification, to replace openssl functions, if a server does not support it
 * Added a workaround for WP_Filesystem initialization. It has sometimes failed, even if Apache process had write access to the required files
 * Added a better error description, in case a backup fails. User can see the error summary, if hovering over a question mark.
+
+= 2.2.3 =
+* Fixed a bug which could cause backup failure when very large files are being backed up on a slow connection.  The plugin will now attempt to transfer large files in separate chunks with automatic retry in case of failure, to improve the reliability of the backup process.
+* Added a few bugfixes to code that was accessing the filesystem, if WP_Filesystem was initialized to non-direct.
+
+= 2.2.4=
+* Improved database backup. Vastly reduced RAM (memory) usage while backing up large databases.
+* Database backup no longer requires passthru() permissions. The backup itself, as well as compression, is now performed by pure PHP code.
+* Improved the file backup process. Several prerequisites have been worked around.
+
+= 2.2.5 =
+* Added a few more conditions to database backup, to solve cases where lack of access to certain tables could cause the entire backup process to fail.
+* PHP's is_writable() was replaced with a more reliable code. Our tests have shown that this function may sometimes incorrectly return false on files that are indeed writable.
+
+= 2.2.6 =
+* Fixed a bug during activation, where certain server configurations could cause 6Scan Backup to fail initialization.
+* Added a few security enhancements.
+
+= 2.2.7 =
+* Several minor bugfixes.
+
 
 == Upgrade Notice ==
 
