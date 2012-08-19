@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) 
 	die( 'No direct access allowed' );
 
-define ( 'SIXSCAN_VERSION' ,							'2.2.7.1' );
+define ( 'SIXSCAN_VERSION' ,							'2.2.8.2' );
 define ( 'SIXSCAN_HTACCESS_VERSION' ,					'1' );
 
 if( empty( $_SERVER[ "HTTPS" ] ) )
@@ -110,9 +110,9 @@ define ( 'SIXSCAN_ANALYTICS_NORMAL_UPDATING_ACT',		'updating' );
 
 define ( 'SIXSCAN_ANALYTICS_OK_STRING',					'ok' );
 define ( 'SIXSCAN_ANALYTICS_FAIL_PREFIX_STRING',		'error_' );
+define ( 'SIXSCAN_HTACCESS_FILE',  						ABSPATH . '/.htaccess' );
 
-define( 'SIXSCAN_HTACCESS_FILE',  						ABSPATH . '/.htaccess' );
-define( 'SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME', 		'6scan-gate.php' );
+define ( 'SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME', 		'6scan-gate.php' );
 
 define( 'SIXSCAN_ADMIN_ACCESS_COOKIE_NAME',				'sixscan_wpblog_admin' );
 
@@ -122,15 +122,39 @@ define( 'SIXSCAN_SECURITY_LOCK_NOTIFY_FILENAME',		'/data/lockout_email.html');
 define( 'SIXSCAN_SECURITY_LOG_SEPARATOR',				"\n" );
 
 /*	If this script is included from outside, we will not have SIXSCAN_PLUGIN_DIR defined, but we do not really need it */
-if ( defined( 'SIXSCAN_PLUGIN_DIR' ) ){	
+if ( defined( 'SIXSCAN_PLUGIN_DIR' ) ){
+
 	define( 'SIXSCAN_HTACCESS_6SCAN', 						SIXSCAN_PLUGIN_DIR . '/data/.htaccess.dat' );
+	function sixscan_common_get_src_htaccess( $is_direct = TRUE ){
+		if ( $is_direct == TRUE )
+			return SIXSCAN_HTACCESS_6SCAN;
+
+		global $wp_filesystem;
+		return untrailingslashit ( $wp_filesystem->find_folder( SIXSCAN_HTACCESS_6SCAN ) );
+	}
+
+
 	define( 'SIXSCAN_SIGNATURE_SRC',						SIXSCAN_PLUGIN_DIR . '/data/' . SIXSCAN_COMM_SIGNATURE_FILENAME );
+	function sixscan_common_get_signature_src( $is_direct = TRUE ){
+		if ( $is_direct == TRUE )
+			return SIXSCAN_SIGNATURE_SRC;
+		
+		global $wp_filesystem;
+		return untrailingslashit( $wp_filesystem->find_folder( SIXSCAN_SIGNATURE_SRC ) );	
+	}
+
 	define( 'SIXSCAN_HTACCESS_6SCAN_GATE_SOURCE',  			SIXSCAN_PLUGIN_DIR . '/data/' . SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME );
+	function sixscan_common_get_gate_src( $is_direct = TRUE ){		
+		if ( $is_direct == TRUE )
+			return SIXSCAN_HTACCESS_6SCAN_GATE_SOURCE;
+		
+		global $wp_filesystem;
+		return untrailingslashit( $wp_filesystem->find_folder( SIXSCAN_HTACCESS_6SCAN_GATE_SOURCE ) );		
+	}	
 	define( 'SIXSCAN_ANALYZER_LOG_FILEPATH',				SIXSCAN_PLUGIN_DIR . SIXSCAN_SECURITY_LOG_FILENAME );	
 }
 
-define( 'SIXSCAN_HTACCESS_6SCAN_GATE_DEST', 			ABSPATH . SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME );
-define( 'SIXSCAN_SIGNATURE_DEST',						ABSPATH . SIXSCAN_COMM_SIGNATURE_FILENAME );
+
 define( 'SIXSCAN_COMMON_DASHBOARD_URL',					'six-scan-dashboard' );
 define( 'SIXSCAN_COMMON_SETTINGS_URL',					'six-scan-settings' );
 define( 'SIXSCAN_COMMON_SUPPORT_URL',					'six-scan-support' );
@@ -155,6 +179,31 @@ kwIDAQAB
 -----END PUBLIC KEY-----
 EOD
 );
+
+
+function sixscan_common_get_htaccess_file_path( $is_direct ){
+	if ( $is_direct == TRUE )
+		return SIXSCAN_HTACCESS_FILE;
+
+	global $wp_filesystem;
+	return $wp_filesystem->abspath() . '.htaccess';
+}
+
+function sixscan_common_get_htaccess_dest_path( $is_direct = TRUE ){
+	if ( $is_direct == TRUE )
+		return ABSPATH . SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME;
+
+	global $wp_filesystem;
+	return $wp_filesystem->abspath() . SIXSCAN_HTACCESS_6SCAN_GATE_FILE_NAME;
+}
+
+function sixscan_common_get_signature_dest_path( $is_direct = TRUE ){
+	if ( $is_direct == TRUE )
+		return ABSPATH . SIXSCAN_COMM_SIGNATURE_FILENAME;
+
+	global $wp_filesystem;
+	return $wp_filesystem->abspath() . SIXSCAN_COMM_SIGNATURE_FILENAME;
+}
 
 function sixscan_common_set_site_id( $site_id ){
 	update_option( SIXSCAN_OPTION_MENU_SITE_ID , $site_id );
@@ -375,7 +424,7 @@ function sixscan_common_gather_system_information_for_anonymous_support_ticket()
 		$is_through_proxy = "false";
 	$submission_data .= "Is access through proxy: $is_through_proxy\n";
 	
-	$htaccess_contents = file_get_contents( SIXSCAN_HTACCESS_FILE );
+	$htaccess_contents = file_get_contents( sixscan_common_get_htaccess_file_path( TRUE ) );
 	if ( $htaccess_contents == FALSE )
 		$htaccess_contents = "Empty";
 	$submission_data .= "Htaccess contents: $htaccess_contents\n";
@@ -405,7 +454,7 @@ function sixscan_common_fatal_error(){
 function sixscan_common_test_dir_writable( $dir_name ){
 	global $wp_filesystem;
 
-	$tmp_fname = tempnam( untrailingslashit( $dir_name ) , 'sixscantmp_');
+	$tmp_fname = untrailingslashit( $dir_name ) . 'sixscantmp_';
 	
 	$ftmp_result = $wp_filesystem->put_contents( $tmp_fname , 'write_test' );	
 	
@@ -413,7 +462,7 @@ function sixscan_common_test_dir_writable( $dir_name ){
 		return FALSE;
 
 	/* Cleanup */
-	unlink( $tmp_fname );
+	$wp_filesystem->delete( $tmp_fname );
 	return TRUE;
 }
 

@@ -14,7 +14,7 @@ function sixscan_installation_manager()
 	$tmp_key = sixscan_common_generate_random_string();
 	if ( sixscan_installation_wpfs_init( $tmp_key ) == FALSE)
 		return;
-
+	
 	/* Run the install */
 	$install_result = sixscan_installation_install( $tmp_key );
 	if ( $install_result !== TRUE ){
@@ -116,7 +116,7 @@ function sixscan_installation_install( $tmp_key ) {
 		}
 
 		/*	Make sure we can create signature file and update the site's .htaccess file */
-		if ( sixscan_common_test_dir_writable( ABSPATH ) == FALSE ){				
+		if ( sixscan_common_test_dir_writable( $wp_filesystem->abspath() ) == FALSE ){				
 			$err_message = "6Scan Install <b>Error</b>: Failed creating signature file at Wordpress directory " . ABSPATH . SIXSCAN_COMM_SIGNATURE_FILENAME .
 			"<br/><br/>Please see <a href='http://codex.wordpress.org/Changing_File_Permissions' target='_blank'>this Wordpress article</a> for more information on how to add write permissions." .
 			"<br/><br/>If you have additional questions, please visit our <a href='http://6scan.com/support' target='_blank'>community</a>";
@@ -182,7 +182,7 @@ function sixscan_installation_install( $tmp_key ) {
 		update_option( SIXSCAN_OPTION_STAT_SUSPICIOUS_REQ_COUNT , 0 );
 		update_option( SIXSCAN_OPTION_STAT_OK_REQ_COUNT , 0);
 		update_option( SIXSCAN_OPTION_WAF_REQUESTED , array() );
-		update_option( SIXSCAN_OPTION_LOGIN_SETTINGS , array() );		
+		update_option( SIXSCAN_OPTION_LOGIN_SETTINGS , array() );				
 		update_option( SIXSCAN_VULN_MESSAGE_DISMISSED , FALSE );
 
 	} catch( Exception $e ) {
@@ -240,7 +240,7 @@ function sixscan_installation_uninstall() {
 		delete_option( SIXSCAN_OPTION_COMM_ORACLE_NONCE );				
 		delete_option( SIXSCAN_OPTION_COMM_LAST_SIG_UPDATE_NONCE );		
 		delete_option( SIXSCAN_OPTION_VULNERABITILY_COUNT );
-		delete_option( SIXSCAN_OPTION_LOGIN_SETTINGS );
+		delete_option( SIXSCAN_OPTION_LOGIN_SETTINGS );		
 		delete_option( SIXSCAN_LOGIN_LOGS );		
 		delete_option( SIXSCAN_OPTION_WPFS_CONFIG );
 		delete_option( SIXSCAN_OPTION_WAF_REQUESTED );
@@ -332,7 +332,13 @@ function sixscan_installation_account_setup_required_notice() {
 
 /*	Returns TRUE if wpfs is already initialized, FALSE if we are waiting for user to enter reg_data */
 function sixscan_installation_wpfs_init( &$config_key ){
-	
+	/*	Wordpress doesn't always detect the fs method correctly. If we detect, that we can write to the filesystem directly - 
+	we can force the method to be direct */
+	$wpfs_detect_try = sixscan_installation_wpfs_detect();
+	if ( $wpfs_detect_try == 'direct' )
+		define( 'FS_METHOD' , 'direct' );
+	else if ( $wpfs_detect_try == 'ftpext' )
+		define( 'FS_METHOD' , 'ftpext' );	
 	if ( WP_Filesystem() ){
 		$config_key = "";
 		return TRUE;
@@ -357,6 +363,42 @@ function sixscan_installation_wpfs_init( &$config_key ){
 	}
 
 	/* User now sees the credential input form */
+	return FALSE;
+}
+
+/*	Since Wordpress FTP method detection is not always correct (The newly created test-file is compared to the owner of Wordpress scrit)
+	We will run the test ourself */
+function sixscan_installation_wpfs_detect(){
+
+	/* First of all - we are checking whether the .htaccess is writable via direct */
+	if ( file_exists( SIXSCAN_HTACCESS_FILE ) && ( sixscan_installation_try_direct_write_file( SIXSCAN_HTACCESS_FILE , FALSE ) == FALSE ) ){		
+		if ( extension_loaded( 'ftp' ) ){
+			return 'ftpext';	
+		} 
+		return FALSE;
+	}
+
+	/*	Taken from Wordpress file.php, with minor changes for our needs, we are testing direct file access */
+	$context = trailingslashit( $context );
+	$temp_file_name = WP_CONTENT_DIR . 'temp-write-test-' . time();
+	if ( sixscan_installation_try_direct_write_file( $temp_file_name , TRUE ) == TRUE )
+		return 'direct';		
+
+	return FALSE;
+}
+
+function sixscan_installation_try_direct_write_file( $fname , $is_to_delete = FALSE ){
+	
+	$temp_handle = @fopen( $fname , 'a+' );
+	if ( $temp_handle ) {			
+		@fclose( $temp_handle );
+		
+		if ( $is_to_delete == TRUE )
+			@unlink( $fname );
+
+		return TRUE;
+	}
+
 	return FALSE;
 }
 	

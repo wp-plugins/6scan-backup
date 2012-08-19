@@ -4,7 +4,7 @@ Plugin Name: 6Scan Backup
 Plugin URI: http://www.6scan.com/
 Description: 6Scan Backup goes beyond existing backup plugins, easily and automatically creating backups of your site and securely storing them in the cloud.
 Author: 6Scan
-Version: 2.2.7
+Version: 2.2.8
 Author URI: http://www.6scan.com
 */
 
@@ -23,6 +23,7 @@ if ( defined( 'SIXSCAN_PLATFORM_TYPE' ) ){
 /* Get the current plugin directory name and URL , while we are at the root */
 define( 'SIXSCAN_PLUGIN_DIR',	trailingslashit( dirname(__FILE__) ) );	
 define( 'SIXSCAN_PLUGIN_URL',	trailingslashit( plugins_url( basename (dirname (__FILE__) ) ) ) );
+define( 'SIXSCAN_PLUGIN_DIRNAME' ,		basename( dirname ( __FILE__ ) ) );
 
 /* Platform type */
 define ( 'SIXSCAN_PLATFORM_TYPE' , 	'wordpress_backup' );

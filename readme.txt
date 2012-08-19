@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.7
+Version: 2.2.8
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.4.1
@@ -163,6 +163,9 @@ We are a team of IT and security experts who have decided to bring comprehensive
 
 = 2.2.7 =
 * Several minor bugfixes.
+
+= 2.2.8 =
+* Changed path references from 'direct' access constants (like 'ABSPATH') to their wp_filesystem counterparts (like $wp_filesystem->abspath). This is used to create backups in filesystems, where FTP credentials are required to access the files (Read/write permissions issues)
 
 
 == Upgrade Notice ==
