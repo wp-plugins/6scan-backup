@@ -1,9 +1,9 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.2.9
+Version: 2.3.1
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
-Tested up to: 3.4.2
+Tested up to: 3.5
 Stable tag: trunk
 
 6Scan Backup goes beyond existing backup plugins, easily and automatically creating backups of your site and securely storing them in the cloud.
@@ -167,6 +167,13 @@ We are a team of IT and security experts who have decided to bring comprehensive
 = 2.2.8 =
 * Changed path references from 'direct' access constants (like 'ABSPATH') to their wp_filesystem counterparts (like $wp_filesystem->abspath). This is used to create backups in filesystems, where FTP credentials are required to access the files (Read/write permissions issues)
 
+= 2.3.0 =
+* Fixed a bug during install with wp_filesystem()
+* When user clicks "Activation" he sees a local page with terms, textbox for his email address and an "Install" button. Registration data (user's email and url) will be passed to 6Scan server only after user clicks Install.  
+* Supports Wordpress 3.5
+
+= 2.3.1 =
+* Minor bugfixes
 
 == Upgrade Notice ==
 
