@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.3.1
+Version: 2.3.2
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.5
@@ -172,8 +172,8 @@ We are a team of IT and security experts who have decided to bring comprehensive
 * When user clicks "Activation" he sees a local page with terms, textbox for his email address and an "Install" button. Registration data (user's email and url) will be passed to 6Scan server only after user clicks Install.  
 * Supports Wordpress 3.5
 
-= 2.3.1 =
-* Minor bugfixes
+= 2.3.2 =
+* A minor UI change
 
 == Upgrade Notice ==
 
