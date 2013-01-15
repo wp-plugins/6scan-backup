@@ -1,6 +1,6 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 2.3.2
+Version: 3.0.1
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
 Tested up to: 3.5
@@ -174,6 +174,9 @@ We are a team of IT and security experts who have decided to bring comprehensive
 
 = 2.3.2 =
 * A minor UI change
+
+= 3.0.1 =
+* 6Scan now allows users to access their dashboard of all registered websites. To allow that, newly registered users now have to enter a password (while activating the plugin)
 
 == Upgrade Notice ==
 
