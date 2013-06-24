@@ -1,9 +1,9 @@
 === 6Scan Backup ===
 Contributors: 6Scan
-Version: 3.0.4
+Version: 3.0.5
 Tags: backup, automatic backup, cloud, online, secured, restore, recovery
 Requires at least: 3.0.0
-Tested up to: 3.5.1
+Tested up to: 3.5.2
 Stable tag: trunk
 
 6Scan Backup goes beyond existing backup plugins, easily and automatically creating backups of your site and securely storing them in the cloud.
@@ -180,6 +180,9 @@ We are a team of IT and security experts who have decided to bring comprehensive
 
 = 3.0.4 =
 * Improved backup processes
+
+= 3.0.5 =
+* New Wordpress version + one more scan server added
 
 == Upgrade Notice ==
 
